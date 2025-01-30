@@ -1,0 +1,12 @@
+Comandos para iniciar la aplicación Ollama Python:
+
+1. Abrir CMD y navegar al directorio:
+cd c:\Users\Jrs\IdeaProjects\Ollama-Python
+
+2. Activar el entorno virtual:
+.\venv\Scripts\activate
+
+3. Ejecutar la aplicación:
+python src/main.py
+
+Nota: Asegúrate de que Ollama esté corriendo en tu sistema antes de iniciar la aplicación.
