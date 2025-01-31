@@ -1,8 +1,8 @@
 flask==3.0.0
 SpeechRecognition==3.10.0
+PyQt5==5.15.9
 requests==2.31.0
 Pillow==10.1.0
-PyQt5==5.15.9
 pyaudio==0.2.14
 beautifulsoup4==4.12.2
-python-dotenv==1.0.1
+python-dotenv==1.0.0

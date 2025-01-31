@@ -1,39 +1,81 @@
 @echo off
 echo Iniciando la aplicacion Ollama Python...
 
-REM Limpiar instalaciones previas de PyQt5
-pip uninstall -y PyQt5 PyQt5-Qt5 PyQt5-sip
-
-REM Actualizar pip
-python -m pip install --upgrade pip
+REM Verificar Python
+python --version >nul 2>&1
+if errorlevel 1 (
+    echo Error: Python no esta instalado
+    echo Por favor, instala Python desde https://www.python.org/downloads/
+    echo Asegurate de marcar "Add Python to PATH" durante la instalacion
+    pause
+    exit /b 1
+)
 
 REM Crear entorno virtual si no existe
 if not exist venv (
     echo Creando entorno virtual...
     python -m venv venv
+    if errorlevel 1 (
+        echo Error al crear el entorno virtual
+        pause
+        exit /b 1
+    )
 )
 
 REM Activar entorno virtual
 call venv\Scripts\activate
+if errorlevel 1 (
+    echo Error al activar el entorno virtual
+    pause
+    exit /b 1
+)
 
-REM Instalar PyQt5 específicamente primero
+REM Actualizar pip
+python -m pip install --upgrade pip
+
+REM Limpiar instalaciones previas de PyQt5
+echo Limpiando instalaciones previas...
+pip uninstall -y PyQt5 PyQt5-Qt5 PyQt5-sip PyQt5-tools
+
+REM Instalar PyQt5 específicamente
+echo Instalando PyQt5...
 pip install PyQt5==5.15.9
+if errorlevel 1 (
+    echo Error al instalar PyQt5
+    pause
+    exit /b 1
+)
 
-REM Instalar el resto de dependencias
-echo Instalando dependencias...
+REM Instalar otras dependencias
+echo Instalando otras dependencias...
 pip install -r requirements.txt
+if errorlevel 1 (
+    echo Error al instalar dependencias
+    pause
+    exit /b 1
+)
 
 REM Verificar Ollama
 echo.
 echo Verificando Ollama...
-ollama --version
+ollama --version >nul 2>&1
 if errorlevel 1 (
     echo ADVERTENCIA: Ollama no esta instalado o no esta en el PATH
-    echo Por favor, instala Ollama desde https://ollama.ai/download
-    echo y asegurate de que este en el PATH del sistema
+    echo Por favor:
+    echo 1. Descarga Ollama desde https://ollama.ai/download
+    echo 2. Instala Ollama
+    echo 3. Agrega Ollama al PATH del sistema
+    echo 4. Reinicia tu computadora
     echo.
-    pause
-    exit /b 1
+    choice /C YN /M "¿Deseas continuar de todos modos?"
+    if errorlevel 2 exit /b 1
+)
+
+REM Crear archivo .env si no existe
+if not exist .env (
+    echo Creando archivo .env...
+    echo OLLAMA_HOST=http://localhost:11434> .env
+    echo OLLAMA_PATH=ollama>> .env
 )
 
 REM Iniciar la aplicacion
